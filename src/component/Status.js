@@ -12,8 +12,11 @@ const Status = (props) => {
         case "PROFIT":
             comment = "Itemをナップサックに入れると得です。"
             break;
+        case "COMPLETE":
+            comment = "ナップサックに詰められる価値は最大で" + props.maxValue + "です。"
+            break;
         default:
-            comment = "Itemがナップサックに入りません。"
+            comment = ""
     }
     return (
         <div className="status">
