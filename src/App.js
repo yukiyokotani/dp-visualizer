@@ -9,7 +9,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
@@ -50,12 +49,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Contents = (theme) => {
-  const [items, setItems] = useState([
-    { weight: 2, value: 3, isIncluded: false, isReffered: false },
-    { weight: 1, value: 2, isIncluded: false, isReffered: false },
-    { weight: 3, value: 3, isIncluded: false, isReffered: false },
-    { weight: 2, value: 5, isIncluded: false, isReffered: false },
-    { weight: 4, value: 6, isIncluded: false, isReffered: false },])
+  const [items, setItems] = useState([])
   const [knapsackCap, setKnapsackCap] = useState(8);
   const [status, setStatus] = useState("");
   const [maxValue, setMaxValue] = useState(0);
@@ -95,7 +89,7 @@ const Contents = (theme) => {
     <Grid container spacing={0}>
       <div className={classes.root}>
         <CssBaseline />
-        <Container component="main" className={classes.main} maxWidth="lg">
+        <Container component="main" className={classes.main} maxWidth={false}>
           <Typography variant="h4" component="h2" gutterBottom align="center">
             Knapsack Problem
           </Typography>
@@ -120,7 +114,7 @@ const Contents = (theme) => {
         </Container>
         <footer className={classes.footer}>
           <Container maxWidth="sm">
-            <Typography variant="body1">Enjoy Hacking</Typography>
+            <Typography variant="body1">Hope this helps you to understand dp.</Typography>
             <Copyright />
           </Container>
         </footer>
@@ -153,77 +147,3 @@ export default function App() {
     </ThemeProvider>
   );
 }
-
-
-// import React, { useState } from 'react';
-// import Table from './component/Table';
-// import List from './component/List';
-// import Knapscak from './component/Knapsack';
-// import Form from './component/Form';
-// import Status from './component/Status';
-
-// const App = () => {
-//   const [items, setItems] = useState([
-//     { weight: 2, value: 3, isIncluded: false, isReffered: false },
-//     { weight: 1, value: 2, isIncluded: false, isReffered: false },
-//     { weight: 3, value: 3, isIncluded: false, isReffered: false },
-//     { weight: 2, value: 5, isIncluded: false, isReffered: false },
-//     { weight: 4, value: 6, isIncluded: false, isReffered: false },])
-//   const [knapsackCap, setKnapsackCap] = useState(8);
-//   const [status, setStatus] = useState("OVER");
-//   const [maxValue, setMaxValue] = useState(0);
-
-//   const addItem = (weight, value) => {
-//     let newItems = [...items, { weight: weight, value: value, isIncluded: false }];
-//     setItems(newItems);
-//   }
-
-//   const deleteItem = (i) => {
-//     let newItems = [...items];
-//     newItems.splice(i, 1);
-//     setItems(newItems);
-//   }
-
-//   const includedTrue = (i) => {
-//     let newItems = [...items];
-//     newItems[i].isIncluded = true;
-//     setItems(newItems);
-//   }
-
-//   const includedAllFalse = () => {
-//     let newItems = [...items];
-//     newItems.forEach(item => item.isIncluded = false);
-//     setItems(newItems);
-//   }
-
-//   const setReffered = (i, bool) => {
-//     let newItems = [...items];
-//     newItems.forEach(item => item.isReffered = false);
-//     newItems[i].isReffered = bool;
-//     setItems(newItems);
-//   }
-
-//   return (
-//     < div className="App" >
-//       <p className="title">Knapsack Problem</p>
-//       <Knapscak knapsackCap={knapsackCap} setKnapsackCap={setKnapsackCap} />
-//       <Form addItem={addItem} />
-//       <List items={items} deleteItem={deleteItem} />
-//       <Status
-//         status={status}
-//         maxValue={maxValue} />
-//       <Table
-//         items={items}
-//         knapsackCap={knapsackCap}
-//         includedTrue={includedTrue}
-//         includedAllFalse={includedAllFalse}
-//         setReffered={setReffered}
-//         setStatus={setStatus}
-//         maxValue={maxValue}
-//         setMaxValue={setMaxValue}
-//       />
-//     </div >
-//   )
-// }
-
-// export default App;

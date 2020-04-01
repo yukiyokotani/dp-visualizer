@@ -1,13 +1,5 @@
-/* body {
-  font: 14px "Century Gothic", Futura, sans-serif;
-  margin: 20px;
-} */
-body {
-  background-color: black;
-  color: rgba(255, 255, 255, 0.8);
-}
-
 .App {
+  width: 100%;
 	text-align: center;
 }
 
@@ -63,12 +55,6 @@ td.reffered {
   color: rgba(255, 255, 255, 1);
   background: rgba(255, 255, 255, 0.1);
 }
-
-.start-button {
-  margin: 0px 50px;
-}
-
-
 
 td.isReffered {
   color: rgba(128, 217, 255, 1);

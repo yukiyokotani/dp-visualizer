@@ -1,15 +1,12 @@
 import React from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import { Delete, Check, CheckBox, CheckBoxOutlineBlank } from '@material-ui/icons';
+import { Delete, CheckBox, CheckBoxOutlineBlank } from '@material-ui/icons';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
@@ -17,16 +14,9 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        margin: {
-            // margin: theme.spacing(0),
-        },
         table: {
             width: '40%',
-            // align: 'center',
-            margin: '4ch'
-        },
-        row: {
-            // rowHeight: '90px',
+            margin: '4ch',
         },
     }),
 );
@@ -86,27 +76,6 @@ const ItemList = (props) => {
             </Grid >
         </ThemeProvider>
     )
-    {/* return (
-        <table className="item-list">
-            <tbody>
-                <tr>
-                    <th>Item</th>
-                    <th>Weight</th>
-                    <th>Value</th>
-                </tr>
-                {props.items.map((item, i) => (
-                    <tr key={i}>
-                        <td className={item.isIncluded ? "included" : ""}>{i + 1}</td>
-                        <td>{item.weight}</td>
-                        <td className={item.isReffered ? "reffered" : ""}>{item.value}</td>
-                        <td><IconButton aria-label="delete" className={classes.margin} onClick={() => props.deleteItem(i)}>
-                            <DeleteIcon fontSize="small" />
-                        </IconButton></td>
-                    </tr>
-                ))}
-            </tbody>
-        </table >
-    ) */}
 };
 
 export default ItemList;
