@@ -1,152 +1,33 @@
-/* body {
-  font: 14px "Century Gothic", Futura, sans-serif;
-  margin: 20px;
-} */
-body {
-  background-color: black;
-  color: #999;
-}
-
-.title {
-  font-size: 28px;
-  font-weight: bold;
-}
-
 .App {
+  width: 100%;
 	text-align: center;
-}
-
-input, button {
-  font-size: 16px;
-  outline: none;
-  border: none;
-}
-.item__form {
-  margin: 1rem auto;
-  text-align: center;
-}
-.knapsack__row {
-  margin: 20px auto;
-  width:30%;
-  text-align: center;
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.6);
-}
-.item__row {
-  margin-right: 20px;
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.6);
-}
-.item__input, .knapsack__input {
-  width: 4rem;
-  display: inline-block;
-  padding-left: 1.5rem;
-  font-size: 16px;
-  color: #999;
-  background: transparent;
-}
-.add-button {
-  position: relative;
-  width: 24px;
-  height: 24px;
-  color: rgba(255, 255, 255, 0.8);
-  background: #FF3366;
-  border-radius: 48px;
-  cursor: pointer;
-  overflow: hidden;
-  -webkit-transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
-  transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
-}
-.delete-button {
-  position: relative;
-  width: 24px;
-  height: 24px;
-  color: rgba(255, 255, 255, 0.8);
-  background: rgb(51, 156, 255);
-  font-size: 16px;
-  border-radius: 48px;
-  cursor: pointer;
-  overflow: hidden;
-  -webkit-transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
-  transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
-}
-.start-button {
-  position: relative;
-  width: 5rem;
-  height: 2rem;
-  color: rgba(255, 255, 255, 0.8);
-  background: #FF3366;
-  border-radius: 3rem;
-  cursor: pointer;
-  overflow: hidden;
-  -webkit-transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
-  transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
-}
-.reset-button {
-  position: relative;
-  width: 5rem;
-  height: 2rem;
-  color: rgba(255, 255, 255, 0.8);
-  background: rgb(51, 156, 255);
-  border-radius: 3rem;
-  cursor: pointer;
-  overflow: hidden;
-  -webkit-transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
-  transition: width 0.3s 0.15s, font-size 0.1s 0.15s;
-}
-
-.item-list {
-  margin: 20px auto;
-  table-layout: auto;
-  width: 20%
 }
 
 .status {
   position: relative;
   margin: 20px auto;
-  width: 25rem;
+  width: 40%;
   height: 2rem;
   line-height: 2rem;
   color: rgba(255, 255, 255, 0.8);
   background: rgba(235, 245, 252, 0.15);
-  border-radius: 3rem;
+  border-radius: 0.5rem;
   overflow: hidden;
 }
 
-td.included {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  flex-flow: column; 
-  vertical-align: top;
-  width: 16px;
-  height: 16px;
-  /* color: #bae9ff; */
-  border: 4px solid rgb(121, 199, 239);
-  background: rgb(121, 199, 239);
-  color: rgb(29, 43, 78);
-}
-
 td.reffered {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  flex-flow: column; 
-  vertical-align: top;
-  width: 24px;
-  height: 24px;
-  color: rgb(166, 209, 222);
   font-weight: bold;
-  /* border: 4px solid rgba(125, 180, 201, 0.5); */
-  background: rgba(125, 180, 201, 0.5);
+  color: rgba(128, 217, 255, 1);
+  background: rgba(128, 217, 255, 0.2);
+  border: 2px solid rgba(128, 217, 255, 1);
 }
 
 .dp-table {
   margin: 20px auto;
   table-layout: fixed;
-  width: 35%;
+  width: 40%;
   border-collapse: collapse;
-  line-height: 28px;
+  line-height: 32px;
 }
 
 .dp-table th {
@@ -154,7 +35,7 @@ td.reffered {
   font-weight: normal;
   line-height: 32px;
   text-align: center;
-  height: 28px;
+  height: 32px;
 }
 
 .dp-table th.row-caption {
@@ -170,25 +51,28 @@ td.reffered {
   font-weight: bold;
   line-height: 28px;
   height: 28px;
-  color: rgb(166, 209, 222);
-  background: rgba(235, 245, 252, 0.1);
-}
-
-.start-button {
-  margin: 0px 50px;
-}
-
-td.isInProcess {
-  background: rgba(221, 212, 158, 0.5);
-  color: rgb(211, 211, 140);
+  font-size: 16px;
+  color: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 td.isReffered {
-  background: rgba(125, 180, 201, 0.5);
+  color: rgba(128, 217, 255, 1);
+  background: rgba(128, 217, 255, 0.2);
+  border: 2px solid rgba(128, 217, 255, 1);
 }
 
 td.isBaseReffered {
-  background: rgba(71, 105, 179, 0.5);
+  color: rgb(255, 128, 171);
+  background: rgba(255, 128, 170, 0.2);
+  border: 2px solid rgba(255, 128, 170, 1);
+
+}
+
+td.isInProcess {
+  color: rgb(245, 255, 129, 1);
+  background: rgba(245, 255, 129, 0.2);
+  border: 2px solid rgba(245, 255, 129, 1);
 }
 
 .square:focus {

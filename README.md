@@ -1,5 +1,11 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# Knapsack Problem Visualizer
+![](demo.gif)
+
+This application visualizes update of dp-table in the case of knapsack problem.
+[Equivalent problem is shown in AtCoder Beginner Contest 032](https://abc032.contest.atcoder.jp/tasks/abc032_d).
+
 ## Available Scripts
 
 In the project directory, you can run:
