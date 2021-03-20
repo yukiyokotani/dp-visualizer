@@ -39,7 +39,7 @@ const Form: React.FC = () => {
           typeof item.worth === 'string'
             ? parseInt(item.worth, 10)
             : item.worth,
-        isIncluded: false,
+        isProcessed: false,
       };
       if (condition.items[9]?.weight) {
         enqueueSnackbar('アイテム数が上限に達しています。', {

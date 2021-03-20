@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export type Item = {
   weight: number;
   worth: number;
-  isIncluded: boolean;
+  isProcessed: boolean;
 };
 
 export type Eval = 'BEFORE' | 'PROFIT' | 'LOSS' | 'OVER' | 'COMPLETE';
@@ -32,22 +32,17 @@ const conditionSlice = createSlice({
     delItem: (state, action: PayloadAction<number>) => {
       state.items.splice(action.payload, 1);
     },
-    setIncluded: (
+    setProcessed: (
       state,
-      action: PayloadAction<{ index: number; isIncluded: boolean }>
+      action: PayloadAction<{ index: number; isProcessed: boolean }>
     ) => {
-      state.items[action.payload.index].isIncluded = action.payload.isIncluded;
+      state.items[action.payload.index].isProcessed =
+        action.payload.isProcessed;
     },
     setIncludedAllFalse: (state) => {
       state.items.forEach((item) => {
-        item.isIncluded = false;
+        item.isProcessed = false;
       });
-    },
-    setReffered: (
-      state,
-      action: PayloadAction<{ index: number; isReffered: boolean }>
-    ) => {
-      state.items[action.payload.index].isIncluded = action.payload.isReffered;
     },
     setCapacity: (state, action: PayloadAction<number>) => {
       state.capacity = action.payload;
@@ -60,7 +55,7 @@ const conditionSlice = createSlice({
     },
     resetCondition: (state) => {
       const resetItems = state.items.map((item) => {
-        return { weight: item.weight, worth: item.worth, isIncluded: false };
+        return { weight: item.weight, worth: item.worth, isProcessed: false };
       });
       return {
         items: resetItems,

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Item } from '../condition/conditionSlice';
 
 export type Status = {
   worth: number;
@@ -6,6 +7,7 @@ export type Status = {
   isProcessed: boolean;
   isReffered: boolean;
   isBasis: boolean;
+  includedItems: Item[];
 };
 
 export type Coordiante = {
@@ -19,6 +21,7 @@ const initialSquare: Status = {
   isProcessed: false,
   isReffered: false,
   isBasis: false,
+  includedItems: [],
 };
 
 const initialState: Status[][] = Array(11)

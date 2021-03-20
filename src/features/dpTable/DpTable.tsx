@@ -1,8 +1,10 @@
 import React, { useCallback } from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { Avatar, Box, Button, Card, Chip, Grid } from '@material-ui/core';
+import { Box, Button, Card, Chip, Grid } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import Square from './Square';
 import tableSlice, { Status, Coordiante } from './tableSlice';
 import { RootState } from '../../utils/store';
@@ -70,16 +72,9 @@ const DpTable: React.FC = () => {
     [dispatch]
   );
 
-  const updateIncluded = useCallback(
-    (newIncluded: { index: number; isIncluded: boolean }) => {
-      dispatch(conditionSlice.actions.setIncluded(newIncluded));
-    },
-    [dispatch]
-  );
-
-  const updateReffered = useCallback(
-    (newReffered: { index: number; isReffered: boolean }) => {
-      dispatch(conditionSlice.actions.setReffered(newReffered));
+  const updateProcessed = useCallback(
+    (newProcessed: { index: number; isProcessed: boolean }) => {
+      dispatch(conditionSlice.actions.setProcessed(newProcessed));
     },
     [dispatch]
   );
@@ -143,8 +138,7 @@ const DpTable: React.FC = () => {
       let newBasis = { ...prevBasis };
 
       // Conditionの更新
-      updateIncluded({ index: prevCurr.i, isIncluded: true });
-      updateReffered({ index: prevCurr.i, isReffered: false });
+      updateProcessed({ index: prevCurr.i, isProcessed: true });
 
       // ひとつ前の処理のハイライトの初期化
       newTable[prevPrev.i][prevPrev.j] = {
@@ -162,8 +156,9 @@ const DpTable: React.FC = () => {
 
       // 評価
       let newWorth = 0;
+      const includedItems = [];
+      // itemがknapsackに入る場合
       if (prevCurr.j >= items[prevCurr.i].weight) {
-        // itemがknapsackに入る場合
         newRef = {
           i: prevCurr.i,
           j: prevCurr.j - items[prevCurr.i].weight,
@@ -177,7 +172,6 @@ const DpTable: React.FC = () => {
           ...newTable[newBasis.i][newBasis.j],
           isBasis: true,
         };
-        updateReffered({ index: prevCurr.i, isReffered: true });
         // itemをknapsackに入れるべきか評価する
         if (
           newTable[prevCurr.i][prevCurr.j - items[prevCurr.i].weight].worth +
@@ -188,15 +182,21 @@ const DpTable: React.FC = () => {
           newWorth =
             newTable[prevCurr.i][prevCurr.j - items[prevCurr.i].weight].worth +
             items[prevCurr.i].worth;
+          includedItems.push(
+            ...newTable[prevCurr.i][prevCurr.j - items[prevCurr.i].weight]
+              .includedItems,
+            items[prevCurr.i]
+          );
           updateEval('PROFIT');
         } else {
           // itemをknapsackに入れると損な場合
           newWorth = newTable[prevCurr.i][prevCurr.j].worth;
+          includedItems.push(...newTable[prevCurr.i][prevCurr.j].includedItems);
           updateEval('LOSS');
-        }
+        } // itemがknapsackに入らない場合
       } else {
-        // itemがknapsackに入らない場合
         newWorth = newTable[prevCurr.i][prevCurr.j].worth;
+        includedItems.push(...newTable[prevCurr.i][prevCurr.j].includedItems);
         updateEval('OVER');
       }
       // 評価結果をもとにtableを更新
@@ -206,6 +206,7 @@ const DpTable: React.FC = () => {
         isProcessed: true,
         isReffered: false,
         isBasis: false,
+        includedItems,
       };
       updateTable(newTable);
 
@@ -223,15 +224,7 @@ const DpTable: React.FC = () => {
         interval
       );
     },
-    [
-      capacity,
-      items,
-      updateEval,
-      updateIncluded,
-      updateMaxWorth,
-      updateReffered,
-      updateTable,
-    ]
+    [capacity, items, updateEval, updateProcessed, updateMaxWorth, updateTable]
   );
 
   // isInProcessのマスを0.1sec毎に走査する関数
@@ -257,7 +250,7 @@ const DpTable: React.FC = () => {
       refCoord,
       basisCoord
     );
-  }, [capacity, items.length, recUpdate, resetTable, table]);
+  }, [capacity, items.length, recUpdate, table]);
 
   /**
    * マスを描画する関数
@@ -274,6 +267,7 @@ const DpTable: React.FC = () => {
         isProcessed={status.isProcessed}
         isReffered={status.isReffered}
         isBasis={status.isBasis}
+        includedItems={status.includedItems}
       />
     );
   }, []);
@@ -298,11 +292,17 @@ const DpTable: React.FC = () => {
             <th>
               {items[i - 1] !== undefined ? (
                 <Chip
-                  avatar={<Avatar>💰</Avatar>}
+                  icon={
+                    items[i - 1].isProcessed ? (
+                      <CheckCircleIcon />
+                    ) : (
+                      <RemoveCircleIcon />
+                    )
+                  }
                   label={`重さ: ${items[i - 1].weight}, 価値: ${
                     items[i - 1].worth
                   }`}
-                  color="secondary"
+                  color={items[i - 1].isProcessed ? 'primary' : 'secondary'}
                   onDelete={
                     condition.eval !== 'BEFORE' && condition.eval !== 'COMPLETE'
                       ? undefined
