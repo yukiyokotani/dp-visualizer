@@ -7,7 +7,6 @@ import Square from './Square';
 import tableSlice, { Status, Coordiante } from './tableSlice';
 import { RootState } from '../../utils/store';
 import conditionSlice, {
-  Condition,
   Eval,
   ConditionState,
 } from '../condition/conditionSlice';
@@ -20,9 +19,9 @@ const useStyles = makeStyles((theme: Theme) =>
       borderCollapse: 'collapse',
     },
     buttons: {
-      marginTop: theme.spacing(4),
+      marginTop: theme.spacing(2),
       '& > *': {
-        marginLeft: theme.spacing(4),
+        marginLeft: theme.spacing(3),
       },
     },
     tableIndex: {
@@ -56,16 +55,10 @@ const DpTable: React.FC = () => {
 
   const { capacity, items } = condition;
 
+  // method
   const updateMaxWorth = useCallback(
     (newMaxworth: number) => {
       dispatch(conditionSlice.actions.setMaxWorth(newMaxworth));
-    },
-    [dispatch]
-  );
-
-  const updateCondition = useCallback(
-    (newCondition: Condition) => {
-      dispatch(conditionSlice.actions.setCondition(newCondition));
     },
     [dispatch]
   );
@@ -98,6 +91,10 @@ const DpTable: React.FC = () => {
     [dispatch]
   );
 
+  const resetCondition = useCallback(() => {
+    dispatch(conditionSlice.actions.resetCondition());
+  }, [dispatch]);
+
   const resetTable = useCallback(() => {
     dispatch(tableSlice.actions.resetTable());
   }, [dispatch]);
@@ -111,7 +108,15 @@ const DpTable: React.FC = () => {
     [dispatch, enqueueSnackbar, resetTable]
   );
 
-  // 再帰的にdp tableを更新する関数
+  /**
+   * 再帰的にdp tableを更新する関数
+   * @param prevTable 一つ前のイテレーションで更新されたdp table
+   * @param interval 更新のインターバル (ms)
+   * @param prevCurr 一つ前のイテレーションで更新したマスの座標
+   * @param prevPrev 一つ前のイテレーションから見た一つ前のイテレーションで更新したマスの座標
+   * @param prevRef 一つ前のイテレーションで残分埋めに参照したマスの座標
+   * @param prevBasis 一つ前のイテレーションで総価値の比較に参照したマスの座標
+   */
   const recUpdate = useCallback(
     (
       prevTable: Status[][],
@@ -124,7 +129,6 @@ const DpTable: React.FC = () => {
       if (prevCurr.i === items.length) {
         updateMaxWorth(prevTable[prevPrev.i][prevPrev.j].worth);
         updateEval('COMPLETE');
-        updateCondition('IDLING');
         return;
       }
       // 更新用に新しいテーブルを作成
@@ -222,7 +226,6 @@ const DpTable: React.FC = () => {
     [
       capacity,
       items,
-      updateCondition,
       updateEval,
       updateIncluded,
       updateMaxWorth,
@@ -233,13 +236,12 @@ const DpTable: React.FC = () => {
 
   // isInProcessのマスを0.1sec毎に走査する関数
   const scanTable = useCallback(() => {
+    // 再帰関数の引数の初期値
     const intervalTime = 300;
     const currCoord = { i: 0, j: 0 };
     const prevCoord = { i: items.length, j: capacity };
     const refCoord = { i: 0, j: 0 }; // アイテムを入れたあまりを最適化するボックス
     const basisCoord = { i: 0, j: 0 }; // 一つ左のボックス
-
-    resetTable();
 
     const newTable: Status[][] = [[]];
     table.forEach((row, i) => {
@@ -257,8 +259,13 @@ const DpTable: React.FC = () => {
     );
   }, [capacity, items.length, recUpdate, resetTable, table]);
 
-  // マスを描画する関数
-  const renderSquare = (status: Status, i: number, j: number) => {
+  /**
+   * マスを描画する関数
+   * @param status マスのstatus
+   * @param i マスのインデックス (x座標)
+   * @param j マスのインデックス (y座標)
+   */
+  const renderSquare = useCallback((status: Status, i: number, j: number) => {
     return (
       <Square
         key={i * 11 + j}
@@ -269,60 +276,85 @@ const DpTable: React.FC = () => {
         isBasis={status.isBasis}
       />
     );
-  };
+  }, []);
 
-  // tableのi行目を描画する関数
-  const renderRow = (i: number) => {
-    return (
-      <tr key={i} className={classes.tableIndex}>
-        {i === 0 ? (
-          <th>
-            <Chip
-              label="空の状態"
-              variant="outlined"
-              className={classes.itemChip}
-            />
-          </th>
-        ) : (
-          <th>
-            {items[i - 1] !== undefined ? (
+  /**
+   * tableのi行目を描画する関数
+   * @param i 何行目か
+   */
+  const renderRow = useCallback(
+    (i: number) => {
+      return (
+        <tr key={i} className={classes.tableIndex}>
+          {i === 0 ? (
+            <th>
               <Chip
-                avatar={<Avatar>💰</Avatar>}
-                label={`重さ: ${items[i - 1].weight}, 価値: ${
-                  items[i - 1].worth
-                }`}
-                color="secondary"
-                onDelete={handleDelete}
+                label="空の状態"
+                variant="outlined"
+                className={classes.itemChip}
               />
-            ) : null}
-          </th>
-        )}
-        {table[i].map((square, j) => renderSquare(square, i, j))}
-      </tr>
-    );
-  };
-
-  const renderCaptionRow = (cap: number) => {
-    // eslint-disable-next-line jsx-a11y/control-has-associated-label
-    const row = [<th className={classes.tableIndexColumn} key={-1} />];
-    for (let i = 0; i <= cap; i += 1) {
-      row.push(
-        <th className={classes.tableDataColumn} key={i}>
-          {i}
-        </th>
+            </th>
+          ) : (
+            <th>
+              {items[i - 1] !== undefined ? (
+                <Chip
+                  avatar={<Avatar>💰</Avatar>}
+                  label={`重さ: ${items[i - 1].weight}, 価値: ${
+                    items[i - 1].worth
+                  }`}
+                  color="secondary"
+                  onDelete={
+                    condition.eval !== 'BEFORE' && condition.eval !== 'COMPLETE'
+                      ? undefined
+                      : handleDelete
+                  }
+                />
+              ) : null}
+            </th>
+          )}
+          {table[i].map((square, j) => renderSquare(square, i, j))}
+        </tr>
       );
-    }
-    return <tr>{row}</tr>;
-  };
+    },
+    [
+      classes.itemChip,
+      classes.tableIndex,
+      condition.eval,
+      handleDelete,
+      items,
+      renderSquare,
+      table,
+    ]
+  );
+
+  /**
+   * tableのカラム名を描画する関数
+   * @param column 何カラム目か
+   */
+  const renderColumnNameRow = useCallback(
+    (column: number) => {
+      // eslint-disable-next-line jsx-a11y/control-has-associated-label
+      const row = [<th className={classes.tableIndexColumn} key={-1} />];
+      for (let i = 0; i <= column; i += 1) {
+        row.push(
+          <th className={classes.tableDataColumn} key={i}>
+            {i}
+          </th>
+        );
+      }
+      return <tr>{row}</tr>;
+    },
+    [classes.tableDataColumn, classes.tableIndexColumn]
+  );
 
   return (
     <Card>
-      <Box p={4}>
+      <Box p={3}>
         <Grid container spacing={2}>
           <Grid item xl={12} xs={12}>
             <table className={classes.dpTable}>
               <tbody>
-                {renderCaptionRow(10)}
+                {renderColumnNameRow(10)}
                 {table.map((row, i) => renderRow(i))}
               </tbody>
             </table>
@@ -332,7 +364,9 @@ const DpTable: React.FC = () => {
               <Button
                 variant="contained"
                 color="secondary"
+                disabled={condition.eval !== 'COMPLETE'}
                 onClick={() => {
+                  resetCondition();
                   resetTable();
                 }}
               >
@@ -341,7 +375,11 @@ const DpTable: React.FC = () => {
               <Button
                 variant="contained"
                 color="primary"
+                disabled={
+                  condition.eval !== 'BEFORE' && condition.eval !== 'COMPLETE'
+                }
                 onClick={() => {
+                  resetTable();
                   scanTable();
                 }}
               >

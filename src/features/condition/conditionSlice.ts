@@ -7,14 +7,12 @@ export type Item = {
 };
 
 export type Eval = 'BEFORE' | 'PROFIT' | 'LOSS' | 'OVER' | 'COMPLETE';
-export type Condition = 'IDLING' | 'PROCESSING';
 
 export type ConditionState = {
   items: Item[];
   capacity: number;
   maxWorth: number;
   eval: Eval;
-  condition: Condition;
 };
 
 const initialState: ConditionState = {
@@ -22,7 +20,6 @@ const initialState: ConditionState = {
   capacity: 10,
   maxWorth: 0,
   eval: 'BEFORE',
-  condition: 'IDLING',
 };
 
 const conditionSlice = createSlice({
@@ -61,10 +58,18 @@ const conditionSlice = createSlice({
     setEval: (state, action: PayloadAction<Eval>) => {
       state.eval = action.payload;
     },
-    setCondition: (state, action: PayloadAction<Condition>) => {
-      state.condition = action.payload;
+    resetCondition: (state) => {
+      const resetItems = state.items.map((item) => {
+        return { weight: item.weight, worth: item.worth, isIncluded: false };
+      });
+      return {
+        items: resetItems,
+        capacity: state.capacity,
+        maxWorth: 0,
+        eval: 'BEFORE',
+      };
     },
-    resetCondition: () => initialState,
+    clearCondition: () => initialState,
   },
 });
 
