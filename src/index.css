@@ -6,7 +6,8 @@
 .status {
   position: relative;
   margin: 20px auto;
-  width: 40%;
+  width: 50%;
+  min-width: 500px;
   height: 2rem;
   line-height: 2rem;
   color: rgba(255, 255, 255, 0.8);
@@ -25,7 +26,8 @@ td.reffered {
 .dp-table {
   margin: 20px auto;
   table-layout: fixed;
-  width: 40%;
+  width: 50%;
+  min-width: 500px;
   border-collapse: collapse;
   line-height: 32px;
 }
