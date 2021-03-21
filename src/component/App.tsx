@@ -12,6 +12,7 @@ import store, { RootState } from '../utils/store';
 import theme from '../utils/theme';
 import Contents from './Contents';
 import Header from './Header';
+import Footer from './Footer';
 
 export const SizeContext = React.createContext({
   isMobile: false,
@@ -35,6 +36,7 @@ const StyledApp: React.FC = () => {
           <CssBaseline />
           <Header />
           <Contents />
+          <Footer />
         </SnackbarProvider>
       </SizeContext.Provider>
     </ThemeProvider>
