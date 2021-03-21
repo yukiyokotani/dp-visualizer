@@ -115,7 +115,7 @@ const Form: React.FC = () => {
                         message: '整数を入力してください。',
                       },
                       min: {
-                        value: 0,
+                        value: 1,
                         message: '1以上10以下の整数を入力してください。',
                       },
                       max: {
