@@ -11,6 +11,10 @@ const useStyles = makeStyles(() =>
       minWidth: '960px',
       overflow: 'auto',
     },
+    mainContents: {
+      marginTop: 0,
+      marginBottom: 0,
+    },
   })
 );
 const Contents: React.FC = () => {
@@ -18,7 +22,7 @@ const Contents: React.FC = () => {
 
   return (
     <Container maxWidth="md" className={classes.root}>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} className={classes.mainContents}>
         <Grid item xl={12} xs={12}>
           <Knapsack />
         </Grid>
