@@ -31,23 +31,33 @@ const useStyles = makeStyles((theme: Theme) =>
         marginLeft: theme.spacing(3),
       },
     },
-    tableIndex: {
+    trData: {
       height: '50px',
     },
-    tableIndexColumn: {
+    thIndex: {
       width: '200px',
+      overflow: 'auto',
+      [theme.breakpoints.down('sm')]: {
+        width: '100px',
+      },
     },
-    tableDataColumn: {
+    thColumn: {
       height: '50px',
       width: 'calc((100% - 200px)/11)',
       minWidth: 'calc((100% - 200px)/11)',
       maxWidth: 'calc((100% - 200px)/11)',
+      [theme.breakpoints.down('sm')]: {
+        width: 'calc((100% - 100px)/11)',
+        minWidth: 'calc((100% - 100px)/11)',
+        maxWidth: 'calc((100% - 100px)/11)',
+      },
     },
     tableLabel: {
       marginLeft: 'calc(200px + (50% - 200px))',
     },
     emptyChip: {
-      width: '80%',
+      paddingLeft: '2.5rem',
+      paddingRight: '2.5rem',
     },
     itemChip: {
       animationName: '$fadeIn',
@@ -301,9 +311,9 @@ const DpTable: React.FC = () => {
   const renderRow = useCallback(
     (i: number) => {
       return (
-        <tr key={`table-row-${i}`} className={classes.tableIndex}>
+        <tr key={`table-row-${i}`} className={classes.trData}>
           {i === 0 ? (
-            <th>
+            <th className={classes.thIndex}>
               <Chip
                 label="空の状態"
                 variant="outlined"
@@ -311,7 +321,7 @@ const DpTable: React.FC = () => {
               />
             </th>
           ) : (
-            <th>
+            <th className={classes.thIndex}>
               {items[i - 1] !== undefined ? (
                 <Chip
                   icon={
@@ -342,7 +352,7 @@ const DpTable: React.FC = () => {
     [
       classes.emptyChip,
       classes.itemChip,
-      classes.tableIndex,
+      classes.trData,
       condition.eval,
       handleDelete,
       items,
@@ -360,20 +370,20 @@ const DpTable: React.FC = () => {
       const row = [
         // eslint-disable-next-line jsx-a11y/control-has-associated-label
         <th
-          className={classes.tableIndexColumn}
+          className={classes.thIndex}
           key={`table-column-name-row-${column}`}
         />,
       ];
       for (let i = 0; i <= column; i += 1) {
         row.push(
-          <th className={classes.tableDataColumn} key={i}>
+          <th className={classes.thColumn} key={i}>
             {i}
           </th>
         );
       }
       return <tr>{row}</tr>;
     },
-    [classes.tableDataColumn, classes.tableIndexColumn]
+    [classes.thColumn, classes.thIndex]
   );
 
   return (
