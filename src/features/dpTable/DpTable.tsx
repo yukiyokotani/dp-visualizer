@@ -35,25 +35,18 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '50px',
     },
     thIndex: {
-      width: '200px',
+      width: '28.5%',
+      maxWidth: '300px',
       overflow: 'auto',
-      [theme.breakpoints.down('sm')]: {
-        width: '100px',
-      },
     },
     thColumn: {
       height: '50px',
-      width: 'calc((100% - 200px)/11)',
-      minWidth: 'calc((100% - 200px)/11)',
-      maxWidth: 'calc((100% - 200px)/11)',
-      [theme.breakpoints.down('sm')]: {
-        width: 'calc((100% - 100px)/11)',
-        minWidth: 'calc((100% - 100px)/11)',
-        maxWidth: 'calc((100% - 100px)/11)',
-      },
+      width: '6.5%',
+      minWidth: '6.5%',
+      maxWidth: '6.5%',
     },
     tableLabel: {
-      marginLeft: 'calc(200px + (50% - 200px))',
+      marginLeft: '50%',
     },
     emptyChip: {
       paddingLeft: '2.5rem',
@@ -352,6 +345,7 @@ const DpTable: React.FC = () => {
     [
       classes.emptyChip,
       classes.itemChip,
+      classes.thIndex,
       classes.trData,
       condition.eval,
       handleDelete,

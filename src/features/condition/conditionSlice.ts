@@ -31,8 +31,12 @@ const conditionSlice = createSlice({
       state.items.push(action.payload);
     },
     delItem: (state, action: PayloadAction<Item>) => {
-      const index = state.items.indexOf(action.payload);
-      state.items.splice(index, 1);
+      const index = state.items.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      if (index !== -1) {
+        state.items.splice(index, 1);
+      }
     },
     setProcessed: (
       state,
