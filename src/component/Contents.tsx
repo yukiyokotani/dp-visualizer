@@ -1,36 +1,20 @@
-import {
-  Container,
-  createStyles,
-  Grid,
-  makeStyles,
-  Theme,
-} from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
 import React from 'react';
-import Condition from '../features/condition/Condition';
+import Knapsack from '../features/condition/Knapsack';
 import Form from '../features/condition/Form';
 import Evaluation from '../features/condition/Evaluation';
 import DpTable from '../features/dpTable/DpTable';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      marginTop: 40,
-    },
-  })
-);
-
 const Contents: React.FC = () => {
-  const classes = useStyles();
-
   return (
-    <Container maxWidth="md" className={classes.root}>
+    <Container maxWidth="md">
       <Grid container spacing={3}>
+        <Grid item xl={12} xs={12}>
+          <Knapsack />
+        </Grid>
         <Grid item xl={12} xs={12}>
           <Form />
         </Grid>
-        {/* <Grid item xl={12} xs={12}>
-          <Condition />
-        </Grid> */}
         <Grid item xl={12} xs={12}>
           <Evaluation />
         </Grid>

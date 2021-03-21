@@ -9,15 +9,17 @@ import AppBar from '@material-ui/core/AppBar';
 import ToolBar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { useMediaQuery } from '@material-ui/core';
+import ViewComfyIcon from '@material-ui/icons/ViewComfy';
 import ThemeSwitch from '../features/theme/ThemeSwitch';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      marginBottom: theme.spacing(4),
+      marginBottom: theme.spacing(3),
     },
     title: {
+      marginLeft: theme.spacing(1),
       marginRight: theme.spacing(4),
     },
     menu: {
@@ -37,6 +39,7 @@ const Header: React.FC = () => {
     <div className={classes.root}>
       <AppBar position="static" elevation={0} color="transparent">
         <ToolBar>
+          <ViewComfyIcon />
           {!isMobile && (
             <Typography variant="h4" className={classes.title}>
               DP VISUALISER

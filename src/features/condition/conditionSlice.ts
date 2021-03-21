@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type Item = {
+  id: string;
   weight: number;
   worth: number;
   isProcessed: boolean;
@@ -29,8 +30,9 @@ const conditionSlice = createSlice({
     addItem: (state, action: PayloadAction<Item>) => {
       state.items.push(action.payload);
     },
-    delItem: (state, action: PayloadAction<number>) => {
-      state.items.splice(action.payload, 1);
+    delItem: (state, action: PayloadAction<Item>) => {
+      const index = state.items.indexOf(action.payload);
+      state.items.splice(index, 1);
     },
     setProcessed: (
       state,
@@ -55,7 +57,12 @@ const conditionSlice = createSlice({
     },
     resetCondition: (state) => {
       const resetItems = state.items.map((item) => {
-        return { weight: item.weight, worth: item.worth, isProcessed: false };
+        return {
+          id: item.id,
+          weight: item.weight,
+          worth: item.worth,
+          isProcessed: false,
+        };
       });
       return {
         items: resetItems,

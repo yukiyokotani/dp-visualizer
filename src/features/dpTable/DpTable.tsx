@@ -1,20 +1,25 @@
 import React, { useCallback } from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { Box, Button, Card, Chip, Grid } from '@material-ui/core';
+import { Box, Button, Paper, Chip, Grid, Typography } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import ViewComfyIcon from '@material-ui/icons/ViewComfy';
 import Square from './Square';
 import tableSlice, { Status, Coordiante } from './tableSlice';
 import { RootState } from '../../utils/store';
 import conditionSlice, {
   Eval,
   ConditionState,
+  Item,
 } from '../condition/conditionSlice';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    paperTitle: {
+      marginLeft: theme.spacing(1),
+    },
     dpTable: {
       width: '100%',
       tableLayout: 'fixed',
@@ -38,8 +43,24 @@ const useStyles = makeStyles((theme: Theme) =>
       minWidth: 'calc((100% - 200px)/11)',
       maxWidth: 'calc((100% - 200px)/11)',
     },
+    tableLabel: {
+      marginLeft: 'calc(200px + (50% - 200px))',
+    },
+    emptyChip: {
+      width: '80%',
+    },
     itemChip: {
-      width: '90%',
+      animationName: '$fadeIn',
+      animationDuration: '.3s',
+      animationTimingFunction: 'ease-in-out',
+    },
+    '@keyframes fadeIn': {
+      '0%': {
+        opacity: 0,
+      },
+      '100%': {
+        opacity: 1,
+      },
     },
   })
 );
@@ -95,8 +116,9 @@ const DpTable: React.FC = () => {
   }, [dispatch]);
 
   const handleDelete = useCallback(
-    (index: number) => {
-      dispatch(conditionSlice.actions.delItem(index));
+    (item: Item) => {
+      dispatch(conditionSlice.actions.delItem(item));
+      dispatch(conditionSlice.actions.setEval('BEFORE'));
       resetTable();
       enqueueSnackbar('アイテムを削除しました。', { variant: 'success' });
     },
@@ -261,7 +283,7 @@ const DpTable: React.FC = () => {
   const renderSquare = useCallback((status: Status, i: number, j: number) => {
     return (
       <Square
-        key={i * 11 + j}
+        key={`square-${i * 11 + j}`}
         worth={status.worth}
         isInProcess={status.isInProcess}
         isProcessed={status.isProcessed}
@@ -279,13 +301,13 @@ const DpTable: React.FC = () => {
   const renderRow = useCallback(
     (i: number) => {
       return (
-        <tr key={i} className={classes.tableIndex}>
+        <tr key={`table-row-${i}`} className={classes.tableIndex}>
           {i === 0 ? (
             <th>
               <Chip
                 label="空の状態"
                 variant="outlined"
-                className={classes.itemChip}
+                className={classes.emptyChip}
               />
             </th>
           ) : (
@@ -303,10 +325,11 @@ const DpTable: React.FC = () => {
                     items[i - 1].worth
                   }`}
                   color={items[i - 1].isProcessed ? 'primary' : 'secondary'}
+                  className={classes.itemChip}
                   onDelete={
                     condition.eval !== 'BEFORE' && condition.eval !== 'COMPLETE'
                       ? undefined
-                      : handleDelete
+                      : () => handleDelete(items[i - 1])
                   }
                 />
               ) : null}
@@ -317,6 +340,7 @@ const DpTable: React.FC = () => {
       );
     },
     [
+      classes.emptyChip,
       classes.itemChip,
       classes.tableIndex,
       condition.eval,
@@ -333,8 +357,13 @@ const DpTable: React.FC = () => {
    */
   const renderColumnNameRow = useCallback(
     (column: number) => {
-      // eslint-disable-next-line jsx-a11y/control-has-associated-label
-      const row = [<th className={classes.tableIndexColumn} key={-1} />];
+      const row = [
+        // eslint-disable-next-line jsx-a11y/control-has-associated-label
+        <th
+          className={classes.tableIndexColumn}
+          key={`table-column-name-row-${column}`}
+        />,
+      ];
       for (let i = 0; i <= column; i += 1) {
         row.push(
           <th className={classes.tableDataColumn} key={i}>
@@ -348,48 +377,60 @@ const DpTable: React.FC = () => {
   );
 
   return (
-    <Card>
-      <Box p={3}>
-        <Grid container spacing={2}>
-          <Grid item xl={12} xs={12}>
-            <table className={classes.dpTable}>
-              <tbody>
-                {renderColumnNameRow(10)}
-                {table.map((row, i) => renderRow(i))}
-              </tbody>
-            </table>
+    <Paper>
+      <Box p={3} display="flex">
+        <Box>
+          <ViewComfyIcon />
+        </Box>
+        <Box flexGrow={1}>
+          <Grid container spacing={2}>
+            <Grid item xl={12} xs={12}>
+              <Box className={classes.tableLabel}>
+                <Typography variant="h5">ナップサックの容量</Typography>
+              </Box>
+            </Grid>
+            <Grid item xl={12} xs={12}>
+              <table className={classes.dpTable}>
+                <tbody>
+                  {renderColumnNameRow(10)}
+                  {table.map((_, i) => renderRow(i))}
+                </tbody>
+              </table>
+            </Grid>
+            <Grid item xl={12} xs={12} container justify="flex-end">
+              <Box className={classes.buttons}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  disabled={condition.eval !== 'COMPLETE'}
+                  onClick={() => {
+                    resetCondition();
+                    resetTable();
+                  }}
+                >
+                  RESET
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={
+                    (condition.eval !== 'BEFORE' &&
+                      condition.eval !== 'COMPLETE') ||
+                    condition.items.length === 0
+                  }
+                  onClick={() => {
+                    resetTable();
+                    scanTable();
+                  }}
+                >
+                  START
+                </Button>
+              </Box>
+            </Grid>
           </Grid>
-          <Grid item xl={12} xs={12} container justify="flex-end">
-            <Box className={classes.buttons}>
-              <Button
-                variant="contained"
-                color="secondary"
-                disabled={condition.eval !== 'COMPLETE'}
-                onClick={() => {
-                  resetCondition();
-                  resetTable();
-                }}
-              >
-                RESET
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                disabled={
-                  condition.eval !== 'BEFORE' && condition.eval !== 'COMPLETE'
-                }
-                onClick={() => {
-                  resetTable();
-                  scanTable();
-                }}
-              >
-                START
-              </Button>
-            </Box>
-          </Grid>
-        </Grid>
+        </Box>
       </Box>
-    </Card>
+    </Paper>
   );
 };
 

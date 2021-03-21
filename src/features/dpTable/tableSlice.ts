@@ -26,7 +26,19 @@ const initialSquare: Status = {
 
 const initialState: Status[][] = Array(11)
   .fill(0)
-  .map(() => Array(11).fill(initialSquare));
+  .map((_, i) => {
+    if (i === 0) {
+      return Array(11).fill({
+        worth: 0,
+        isInProcess: false,
+        isProcessed: true,
+        isReffered: false,
+        isBasis: false,
+        includedItems: [],
+      });
+    }
+    return Array(11).fill(initialSquare);
+  });
 
 const tableSlice = createSlice({
   name: 'table',

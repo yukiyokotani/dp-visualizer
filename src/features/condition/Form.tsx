@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { Box, Card, IconButton } from '@material-ui/core';
@@ -7,14 +7,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { useForm, Controller } from 'react-hook-form';
 import AddIcon from '@material-ui/icons/Add';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import conditionSlice, { ConditionState, Item } from './conditionSlice';
 import { RootState } from '../../utils/store';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
-    root: {},
+    icon: {
+      margin: '16px 16px 16px 0px',
+    },
     buttonBox: {
-      margin: '4px 4px 4px 12px',
+      margin: '4px 0px 4px 12px',
     },
   })
 );
@@ -23,7 +26,7 @@ const Form: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const { control, handleSubmit, errors } = useForm<Item>();
+  const { control, handleSubmit, errors, reset } = useForm<Item>();
   const condition = useSelector<RootState, ConditionState>(
     (state) => state.condition
   );
@@ -31,6 +34,7 @@ const Form: React.FC = () => {
   const onSuccess = useCallback(
     (item: Item) => {
       const newItem: Item = {
+        id: new Date().toISOString(),
         weight:
           typeof item.weight === 'string'
             ? parseInt(item.weight, 10)
@@ -49,8 +53,9 @@ const Form: React.FC = () => {
       }
       dispatch(conditionSlice.actions.addItem(newItem));
       enqueueSnackbar('アイテムを追加しました。', { variant: 'success' });
+      reset({ weight: 1, worth: 1 });
     },
-    [condition.items, dispatch, enqueueSnackbar]
+    [condition.items, dispatch, enqueueSnackbar, reset]
   );
 
   const onError = useCallback(() => {
@@ -62,13 +67,16 @@ const Form: React.FC = () => {
       <Box p={3}>
         <Grid container spacing={2}>
           <Grid item xl={12} xs={12} container>
+            <Box className={classes.icon}>
+              <AddShoppingCartIcon />
+            </Box>
             <Box flexGrow={1}>
               <Grid container spacing={2}>
                 <Grid item xl={6} xs={6}>
                   <Controller
                     control={control}
                     name="weight"
-                    defaultValue=""
+                    defaultValue={1}
                     rules={{
                       required: '必須項目です。',
                       pattern: {
@@ -77,16 +85,16 @@ const Form: React.FC = () => {
                       },
                       min: {
                         value: 1,
-                        message: '1以上10以下の整数を入力してください。',
+                        message: '1以上, 10以下の整数を入力してください。',
                       },
                       max: {
                         value: 10,
-                        message: '1以上10以下の整数を入力してください。',
+                        message: '1以上, 10以下の整数を入力してください。',
                       },
                     }}
                     as={
                       <TextField
-                        label="重さ"
+                        label="重さ (1~10)"
                         variant="outlined"
                         fullWidth
                         error={!!errors.weight}
@@ -99,7 +107,7 @@ const Form: React.FC = () => {
                   <Controller
                     control={control}
                     name="worth"
-                    defaultValue=""
+                    defaultValue={1}
                     rules={{
                       required: '必須項目です。',
                       pattern: {
@@ -117,7 +125,7 @@ const Form: React.FC = () => {
                     }}
                     as={
                       <TextField
-                        label="価値"
+                        label="価値 (1~100)"
                         variant="outlined"
                         fullWidth
                         error={!!errors.worth}
@@ -131,6 +139,9 @@ const Form: React.FC = () => {
             <Box className={classes.buttonBox}>
               <IconButton
                 color="primary"
+                disabled={
+                  condition.eval !== 'BEFORE' && condition.eval !== 'COMPLETE'
+                }
                 onClick={handleSubmit(onSuccess, onError)}
               >
                 <AddIcon />

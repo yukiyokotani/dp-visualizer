@@ -1,6 +1,7 @@
-import { Box, Card, Grid, Typography } from '@material-ui/core';
+import { Box, Paper, Grid, Typography } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { RootState } from '../../utils/store';
 import { ConditionState } from './conditionSlice';
 
@@ -31,15 +32,18 @@ const Evaluation: React.FC = () => {
   }
 
   return (
-    <Card>
+    <Paper>
       <Box p={3}>
         <Grid container spacing={2}>
-          <Grid item xl={12} xs={12}>
-            <Typography variant="body1">{comment}</Typography>
+          <Grid item xl={12} xs={12} container alignItems="center">
+            <InfoOutlinedIcon />
+            <Box ml={2}>
+              <Typography variant="body1">{comment}</Typography>
+            </Box>
           </Grid>
         </Grid>
       </Box>
-    </Card>
+    </Paper>
   );
 };
 

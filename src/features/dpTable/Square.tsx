@@ -1,6 +1,8 @@
 import {
+  Box,
   Chip,
   createStyles,
+  Divider,
   makeStyles,
   Theme,
   Tooltip,
@@ -29,6 +31,9 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
     },
     chipItem: {
+      marginBottom: theme.spacing(0.5),
+    },
+    chipSummary: {
       margin: theme.spacing(0.5),
     },
   })
@@ -71,19 +76,42 @@ const Square: React.FC<Status> = ({
     <Tooltip
       title={
         // eslint-disable-next-line no-nested-ternary
-        isProcessed
-          ? includedItems.length === 0
-            ? ''
-            : includedItems.map((item) => (
-                <div className={classes.chipItem}>
-                  <Chip
-                    icon={<CheckCircleIcon />}
-                    label={`重さ: ${item.weight}, 価値: ${item.worth}`}
-                    color="primary"
-                  />
-                </div>
-              ))
-          : ''
+        isProcessed ? (
+          includedItems.length === 0 ? (
+            <Typography variant="body2" align="center">
+              空です
+            </Typography>
+          ) : (
+            <>
+              <Box pt="4px" pb="2px">
+                {includedItems.map((item) => (
+                  <div className={classes.chipItem} key={item.id}>
+                    <Chip
+                      icon={<CheckCircleIcon />}
+                      label={`重さ: ${item.weight}, 価値: ${item.worth}`}
+                      color="primary"
+                    />
+                  </div>
+                ))}{' '}
+              </Box>
+              <Divider />
+              <div className={classes.chipSummary}>
+                <Typography
+                  variant="body2"
+                  align="center"
+                >{`重さ: ${includedItems.reduce(
+                  (acc, cur) => acc + cur.weight,
+                  0
+                )}, 価値: ${includedItems.reduce(
+                  (acc, cur) => acc + cur.worth,
+                  0
+                )}`}</Typography>
+              </div>
+            </>
+          )
+        ) : (
+          ''
+        )
       }
     >
       <td className={`${className} ${classes.tableTd}`}>

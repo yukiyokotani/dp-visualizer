@@ -10,7 +10,6 @@ import { Overrides } from '@material-ui/core/styles/overrides';
 import { Shadows } from '@material-ui/core/styles/shadows';
 import { lightGreen, red } from '@material-ui/core/colors';
 import typography from './typography';
-import { lightPaper, darkPaper } from './paper';
 import { softShadows, strongShadows } from './shadows';
 
 const baseConfig: ThemeOptions = {
@@ -42,16 +41,6 @@ const baseConfig: ThemeOptions = {
         minWidth: 32,
       },
     },
-    MuiChip: {
-      root: {
-        backgroundColor: 'rgba(0,0,0,0.075)',
-      },
-    },
-    MuiPaper: {
-      rounded: {
-        borderRadius: 10,
-      },
-    },
   },
 };
 
@@ -70,7 +59,7 @@ const themeConfigs: {
       },
       background: {
         default: '#f5f5f5',
-        paper: '#f5f05f5',
+        paper: '#fafafa',
       },
       primary: {
         main: '#2196f3',
@@ -90,9 +79,6 @@ const themeConfigs: {
       },
     },
     shadows: softShadows,
-    overrides: {
-      MuiPaper: { ...lightPaper },
-    },
   },
   {
     mode: 'dark',
@@ -108,7 +94,7 @@ const themeConfigs: {
       },
       background: {
         default: '#1d1c21',
-        paper: '#1d1c21',
+        paper: '#262529',
       },
       primary: {
         main: '#0288d1',
@@ -128,9 +114,6 @@ const themeConfigs: {
       },
     },
     shadows: strongShadows,
-    overrides: {
-      MuiPaper: { ...darkPaper },
-    },
   },
 ];
 
