@@ -1,10 +1,4 @@
-import {
-  Container,
-  createStyles,
-  Grid,
-  makeStyles,
-  Theme,
-} from '@material-ui/core';
+import { Container, createStyles, Grid, makeStyles } from '@material-ui/core';
 import React from 'react';
 import Knapsack from '../features/condition/Knapsack';
 import Form from '../features/condition/Form';
