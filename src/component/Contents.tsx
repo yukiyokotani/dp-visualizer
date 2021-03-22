@@ -8,7 +8,7 @@ import DpTable from '../features/dpTable/DpTable';
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      minWidth: '960px',
+      marginBottom: '16px',
       overflow: 'auto',
     },
     mainContents: {

@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
     tableTd: {
       border: `1px solid ${theme.palette.divider}`,
       textAlign: 'center',
+      overflow: 'auto',
     },
     chipItem: {
       marginBottom: theme.spacing(0.5),

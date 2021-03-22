@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { Box, Card, Slider, Typography } from '@material-ui/core';
@@ -7,6 +7,7 @@ import ShoppingBasketOutlinedIcon from '@material-ui/icons/ShoppingBasketOutline
 import conditionSlice, { ConditionState } from './conditionSlice';
 import { RootState } from '../../utils/store';
 import tableSlice from '../dpTable/tableSlice';
+import { SizeContext } from '../../component/App';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -22,6 +23,7 @@ const Knapsack: React.FC = () => {
   const condition = useSelector<RootState, ConditionState>(
     (state) => state.condition
   );
+  const { isMobile } = useContext(SizeContext);
 
   const marks = useMemo(
     () =>
@@ -48,16 +50,18 @@ const Knapsack: React.FC = () => {
 
   return (
     <Card>
-      <Box p={3} display="flex">
-        <Box className={classes.icon}>
-          <ShoppingBasketOutlinedIcon />
-        </Box>
-        <Box flexGrow={1}>
-          <Grid container spacing={2}>
-            <Grid item xl={12} xs={12} container>
-              <Typography variant="h5" gutterBottom>
-                ナップサックの容量
-              </Typography>
+      <Box p={isMobile ? 2 : 3}>
+        <Grid container spacing={2}>
+          <Grid item xl={1} sm={1} xs={2}>
+            <Box className={classes.icon}>
+              <ShoppingBasketOutlinedIcon />
+            </Box>
+          </Grid>
+          <Grid item xl={11} sm={11} xs={10}>
+            <Typography variant="h5" gutterBottom>
+              ナップサックの容量
+            </Typography>
+            <Box pr={2}>
               <Slider
                 defaultValue={10}
                 aria-labelledby="discrete-slider"
@@ -71,9 +75,9 @@ const Knapsack: React.FC = () => {
                 }
                 onChange={(_, value) => handleChange(value)}
               />
-            </Grid>
+            </Box>
           </Grid>
-        </Box>
+        </Grid>{' '}
       </Box>
     </Card>
   );
