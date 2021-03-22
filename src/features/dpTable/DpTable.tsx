@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { Box, Button, Paper, Chip, Grid, Typography } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ import conditionSlice, {
   ConditionState,
   Item,
 } from '../condition/conditionSlice';
+import { SizeContext } from '../../component/App';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,11 +47,15 @@ const useStyles = makeStyles((theme: Theme) =>
       maxWidth: '6.5%',
     },
     tableLabel: {
-      marginLeft: '50%',
+      marginLeft: 'calc(67.5% - 4.5rem)',
     },
     emptyChip: {
       paddingLeft: '2.5rem',
       paddingRight: '2.5rem',
+      [theme.breakpoints.down('sm')]: {
+        paddingLeft: 'initial',
+        paddingRight: 'initial',
+      },
     },
     itemChip: {
       animationName: '$fadeIn',
@@ -72,6 +77,7 @@ const DpTable: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
+  const { isMobile } = useContext(SizeContext);
 
   // state
   const table = useSelector<RootState, Status[][]>((state) => state.table);
@@ -318,15 +324,16 @@ const DpTable: React.FC = () => {
               {items[i - 1] !== undefined ? (
                 <Chip
                   icon={
-                    items[i - 1].isProcessed ? (
+                    // eslint-disable-next-line no-nested-ternary
+                    isMobile ? undefined : items[i - 1].isProcessed ? (
                       <CheckCircleIcon />
                     ) : (
                       <RemoveCircleIcon />
                     )
                   }
-                  label={`重さ: ${items[i - 1].weight}, 価値: ${
-                    items[i - 1].worth
-                  }`}
+                  label={`${isMobile ? '重' : '重さ: '}${
+                    items[i - 1].weight
+                  }, ${isMobile ? '価' : '価値: '}${items[i - 1].worth}`}
                   color={items[i - 1].isProcessed ? 'primary' : 'secondary'}
                   className={classes.itemChip}
                   onDelete={
@@ -349,6 +356,7 @@ const DpTable: React.FC = () => {
       classes.trData,
       condition.eval,
       handleDelete,
+      isMobile,
       items,
       renderSquare,
       table,
@@ -382,57 +390,61 @@ const DpTable: React.FC = () => {
 
   return (
     <Paper>
-      <Box p={3} display="flex">
-        <Box>
-          <ViewComfyIcon />
-        </Box>
-        <Box flexGrow={1}>
-          <Grid container spacing={2}>
-            <Grid item xl={12} xs={12}>
-              <Box className={classes.tableLabel}>
-                <Typography variant="h5">ナップサックの容量</Typography>
-              </Box>
-            </Grid>
-            <Grid item xl={12} xs={12}>
-              <table className={classes.dpTable}>
-                <tbody>
-                  {renderColumnNameRow(10)}
-                  {table.map((_, i) => renderRow(i))}
-                </tbody>
-              </table>
-            </Grid>
-            <Grid item xl={12} xs={12} container justify="flex-end">
-              <Box className={classes.buttons}>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  disabled={condition.eval !== 'COMPLETE'}
-                  onClick={() => {
-                    resetCondition();
-                    resetTable();
-                  }}
-                >
-                  RESET
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={
-                    (condition.eval !== 'BEFORE' &&
-                      condition.eval !== 'COMPLETE') ||
-                    condition.items.length === 0
-                  }
-                  onClick={() => {
-                    resetTable();
-                    scanTable();
-                  }}
-                >
-                  START
-                </Button>
-              </Box>
+      <Box p={isMobile ? 2 : 3}>
+        <Grid container spacing={2}>
+          <Grid item xl={1} sm={1} xs={1}>
+            <Box>
+              <ViewComfyIcon />
+            </Box>
+          </Grid>
+          <Grid item xl={12} sm={12} xs={12}>
+            <Grid container spacing={2}>
+              <Grid item xl={12} xs={12}>
+                <Box className={classes.tableLabel}>
+                  <Typography variant="h5">ナップサックの容量</Typography>
+                </Box>
+              </Grid>
+              <Grid item xl={12} xs={12}>
+                <table className={classes.dpTable}>
+                  <tbody>
+                    {renderColumnNameRow(10)}
+                    {table.map((_, i) => renderRow(i))}
+                  </tbody>
+                </table>
+              </Grid>
+              <Grid item xl={12} xs={12} container justify="flex-end">
+                <Box className={classes.buttons}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    disabled={condition.eval !== 'COMPLETE'}
+                    onClick={() => {
+                      resetCondition();
+                      resetTable();
+                    }}
+                  >
+                    RESET
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={
+                      (condition.eval !== 'BEFORE' &&
+                        condition.eval !== 'COMPLETE') ||
+                      condition.items.length === 0
+                    }
+                    onClick={() => {
+                      resetTable();
+                      scanTable();
+                    }}
+                  >
+                    START
+                  </Button>
+                </Box>
+              </Grid>
             </Grid>
           </Grid>
-        </Box>
+        </Grid>
       </Box>
     </Paper>
   );

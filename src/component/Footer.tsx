@@ -6,15 +6,10 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      position: 'fixed',
-      left: 0,
-      bottom: 0,
-      width: '100%',
       textAlign: 'right',
     },
     icon: {
-      marginRight: theme.spacing(4),
-      marginBottom: theme.spacing(2),
+      margin: '8px 16px 16px 0px',
     },
     link: {
       textDecoration: 'none',

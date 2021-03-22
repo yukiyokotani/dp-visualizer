@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -10,14 +10,20 @@ import AddIcon from '@material-ui/icons/Add';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import conditionSlice, { ConditionState, Item } from './conditionSlice';
 import { RootState } from '../../utils/store';
+import { SizeContext } from '../../component/App';
 
 const useStyles = makeStyles(() =>
   createStyles({
     icon: {
+      minWidth: '48px',
       margin: '16px 16px 16px 0px',
     },
     buttonBox: {
-      margin: '4px 0px 4px 12px',
+      minWidth: '48px',
+      margin: '4px 0px',
+    },
+    textField: {
+      minWidth: '100px',
     },
   })
 );
@@ -26,6 +32,7 @@ const Form: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
+  const { isMobile } = useContext(SizeContext);
   const { control, handleSubmit, errors, reset } = useForm<Item>();
   const condition = useSelector<RootState, ConditionState>(
     (state) => state.condition
@@ -64,78 +71,76 @@ const Form: React.FC = () => {
 
   return (
     <Card>
-      <Box p={3}>
+      <Box p={isMobile ? 2 : 3}>
         <Grid container spacing={2}>
-          <Grid item xl={12} xs={12} container>
+          <Grid item xl={1} sm={1} xs={2}>
             <Box className={classes.icon}>
               <AddShoppingCartIcon />
             </Box>
-            <Box flexGrow={1}>
-              <Grid container spacing={2}>
-                <Grid item xl={6} xs={6}>
-                  <Controller
-                    control={control}
-                    name="weight"
-                    defaultValue={1}
-                    rules={{
-                      required: '必須項目です。',
-                      pattern: {
-                        value: /^[0-9]+$/,
-                        message: '整数を入力してください。',
-                      },
-                      min: {
-                        value: 1,
-                        message: '1以上, 10以下の整数を入力してください。',
-                      },
-                      max: {
-                        value: 10,
-                        message: '1以上, 10以下の整数を入力してください。',
-                      },
-                    }}
-                    as={
-                      <TextField
-                        label="重さ (1~10)"
-                        variant="outlined"
-                        fullWidth
-                        error={!!errors.weight}
-                        helperText={errors.weight?.message}
-                      />
-                    }
-                  />
-                </Grid>
-                <Grid item xl={6} xs={6}>
-                  <Controller
-                    control={control}
-                    name="worth"
-                    defaultValue={1}
-                    rules={{
-                      required: '必須項目です。',
-                      pattern: {
-                        value: /^[0-9]+$/,
-                        message: '整数を入力してください。',
-                      },
-                      min: {
-                        value: 1,
-                        message: '1以上10以下の整数を入力してください。',
-                      },
-                      max: {
-                        value: 100,
-                        message: '0以上100以下の整数を入力してください。',
-                      },
-                    }}
-                    as={
-                      <TextField
-                        label="価値 (1~100)"
-                        variant="outlined"
-                        fullWidth
-                        error={!!errors.worth}
-                        helperText={errors.worth?.message}
-                      />
-                    }
-                  />
-                </Grid>
-              </Grid>
-            </Box>
+          </Grid>
+          <Grid item xl={5} sm={5} xs={4}>
+            <Controller
+              control={control}
+              name="weight"
+              defaultValue={1}
+              rules={{
+                required: '必須項目です。',
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: '整数を入力してください。',
+                },
+                min: {
+                  value: 1,
+                  message: '1以上, 10以下の整数を入力してください。',
+                },
+                max: {
+                  value: 10,
+                  message: '1以上, 10以下の整数を入力してください。',
+                },
+              }}
+              as={
+                <TextField
+                  label={isMobile ? '重さ' : '重さ (1~10)'}
+                  variant="outlined"
+                  fullWidth
+                  error={!!errors.weight}
+                  helperText={errors.weight?.message}
+                />
+              }
+            />
+          </Grid>
+          <Grid item xl={5} sm={5} xs={4}>
+            <Controller
+              control={control}
+              name="worth"
+              defaultValue={1}
+              rules={{
+                required: '必須項目です。',
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: '整数を入力してください。',
+                },
+                min: {
+                  value: 1,
+                  message: '1以上10以下の整数を入力してください。',
+                },
+                max: {
+                  value: 100,
+                  message: '0以上100以下の整数を入力してください。',
+                },
+              }}
+              as={
+                <TextField
+                  label={isMobile ? '価値' : '価値 (1~100)'}
+                  variant="outlined"
+                  fullWidth
+                  error={!!errors.worth}
+                  helperText={errors.worth?.message}
+                />
+              }
+            />
+          </Grid>
+          <Grid item xl={1} sm={1} xs={2} container justify="flex-end">
             <Box className={classes.buttonBox}>
               <IconButton
                 color="primary"
