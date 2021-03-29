@@ -33,7 +33,7 @@ const Header: React.FC = () => {
         <ToolBar>
           <ViewComfyIcon />
           <Typography variant="h4" className={classes.title}>
-            DP VISUALISER
+            DP Table Visualizer
           </Typography>
           <div className={classes.menu}>
             <ThemeSwitch />
