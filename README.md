@@ -1,4 +1,4 @@
-# Knapsack Problem Visualizer
+# Knapsack Problem Visualizer [[Demo](https://yokotani92.github.io/dp-visualizer/)]
 This application visualizes update of dp-table in the case of knapsack problem.  
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
