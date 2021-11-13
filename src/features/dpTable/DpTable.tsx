@@ -1,9 +1,19 @@
 import React, { useCallback, useContext } from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { Box, Button, Paper, Chip, Grid, Typography } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Paper,
+  Chip,
+  Grid,
+  Typography,
+  FormControlLabel,
+  Switch,
+} from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import ViewComfyIcon from '@material-ui/icons/ViewComfy';
 import Square from './Square';
@@ -122,6 +132,10 @@ const DpTable: React.FC = () => {
 
   const resetTable = useCallback(() => {
     dispatch(tableSlice.actions.resetTable());
+  }, [dispatch]);
+
+  const toggleAnimation = useCallback(() => {
+    dispatch(conditionSlice.actions.toggleAnimation());
   }, [dispatch]);
 
   const handleDelete = useCallback(
@@ -261,7 +275,7 @@ const DpTable: React.FC = () => {
   // isInProcessのマスを0.1sec毎に走査する関数
   const scanTable = useCallback(() => {
     // 再帰関数の引数の初期値
-    const intervalTime = 300;
+    const intervalTime = condition.enableAnimation ? 300 : 0;
     const currCoord = { i: 0, j: 0 };
     const prevCoord = { i: items.length, j: capacity };
     const refCoord = { i: 0, j: 0 }; // アイテムを入れたあまりを最適化するボックス
@@ -281,7 +295,7 @@ const DpTable: React.FC = () => {
       refCoord,
       basisCoord
     );
-  }, [capacity, items.length, recUpdate, table]);
+  }, [capacity, condition.enableAnimation, items.length, recUpdate, table]);
 
   /**
    * マスを描画する関数
@@ -412,8 +426,16 @@ const DpTable: React.FC = () => {
                   </tbody>
                 </table>
               </Grid>
-              <Grid item xl={12} xs={12} container justify="flex-end">
+              <Grid item xl={12} xs={12} container justifyContent="flex-end">
                 <Box className={classes.buttons}>
+                  <FormControlLabel
+                    control={<Switch />}
+                    label="低速"
+                    checked={condition.enableAnimation}
+                    onChange={() => {
+                      toggleAnimation();
+                    }}
+                  />
                   <Button
                     variant="contained"
                     color="secondary"

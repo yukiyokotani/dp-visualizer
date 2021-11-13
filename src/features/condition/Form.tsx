@@ -140,7 +140,7 @@ const Form: React.FC = () => {
               }
             />
           </Grid>
-          <Grid item xl={1} sm={1} xs={2} container justify="flex-end">
+          <Grid item xl={1} sm={1} xs={2} container justifyContent="flex-end">
             <Box className={classes.buttonBox}>
               <IconButton
                 color="primary"

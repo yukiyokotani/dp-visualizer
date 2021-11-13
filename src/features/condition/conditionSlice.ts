@@ -14,6 +14,7 @@ export type ConditionState = {
   capacity: number;
   maxWorth: number;
   eval: Eval;
+  enableAnimation: boolean;
 };
 
 const initialState: ConditionState = {
@@ -21,6 +22,7 @@ const initialState: ConditionState = {
   capacity: 10,
   maxWorth: 0,
   eval: 'BEFORE',
+  enableAnimation: true,
 };
 
 const conditionSlice = createSlice({
@@ -73,9 +75,13 @@ const conditionSlice = createSlice({
         capacity: state.capacity,
         maxWorth: 0,
         eval: 'BEFORE',
+        enableAnimation: state.enableAnimation,
       };
     },
     clearCondition: () => initialState,
+    toggleAnimation: (state) => {
+      state.enableAnimation = !state.enableAnimation;
+    },
   },
 });
 
