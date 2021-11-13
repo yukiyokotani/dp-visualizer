@@ -1,7 +1,7 @@
 # Knapsack Problem Visualizer [[Demo](https://yukiyokotani.github.io/dp-visualizer/)]
 This application visualizes update of dp-table in the case of knapsack problem.  
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is built by [Vite](https://vitejs.dev/).
 
 ## Available Scripts
 
@@ -14,11 +14,5 @@ Open [http://localhost:3000/dp-visualizer](http://localhost:3000/dp-visualizer) 
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Builds the app for production to the `dist` folder.<br />
 
