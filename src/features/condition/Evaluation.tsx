@@ -37,10 +37,10 @@ const Evaluation: React.FC = () => {
     <Paper>
       <Box p={isMobile ? 2 : 3}>
         <Grid container spacing={2}>
-          <Grid item xl={1} sm={1} xs={2} alignItems="center">
+          <Grid item xl={1} sm={1} xs={2}>
             <InfoOutlinedIcon />
           </Grid>
-          <Grid item xl={11} sm={11} xs={10} alignItems="center">
+          <Grid item xl={11} sm={11} xs={10}>
             <Typography variant="body1">{comment}</Typography>
           </Grid>
         </Grid>
