@@ -2,11 +2,10 @@ import React, { useCallback, useContext } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import { Box, Card, IconButton } from '@material-ui/core';
+import { Box, Button, Card } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { useForm, Controller } from 'react-hook-form';
-import AddIcon from '@material-ui/icons/Add';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import conditionSlice, { ConditionState, Item } from './conditionSlice';
 import { RootState } from '../../utils/store';
@@ -19,8 +18,7 @@ const useStyles = makeStyles(() =>
       margin: '16px 16px 16px 0px',
     },
     buttonBox: {
-      minWidth: '48px',
-      margin: '4px 0px',
+      marginTop: '10px',
     },
     textField: {
       minWidth: '100px',
@@ -69,91 +67,113 @@ const Form: React.FC = () => {
     enqueueSnackbar('値が不正です。', { variant: 'error' });
   }, [enqueueSnackbar]);
 
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (e.code === 'Enter') {
+        e.target.dispatchEvent(new Event('submit'));
+        handleSubmit(onSuccess, onError);
+      }
+    },
+    [handleSubmit, onError, onSuccess]
+  );
+
   return (
     <Card>
       <Box p={isMobile ? 2 : 3}>
-        <Grid container spacing={2}>
-          <Grid item xl={1} sm={1} xs={2}>
-            <Box className={classes.icon}>
-              <AddShoppingCartIcon />
-            </Box>
-          </Grid>
-          <Grid item xl={5} sm={5} xs={4}>
-            <Controller
-              control={control}
-              name="weight"
-              defaultValue={1}
-              rules={{
-                required: '必須項目です。',
-                pattern: {
-                  value: /^[0-9]+$/,
-                  message: '整数を入力してください。',
-                },
-                min: {
-                  value: 1,
-                  message: '1以上, 10以下の整数を入力してください。',
-                },
-                max: {
-                  value: 10,
-                  message: '1以上, 10以下の整数を入力してください。',
-                },
-              }}
-              as={
-                <TextField
-                  label={isMobile ? '重さ' : '重さ (1~10)'}
-                  variant="outlined"
-                  fullWidth
-                  error={!!errors.weight}
-                  helperText={errors.weight?.message}
-                />
-              }
-            />
-          </Grid>
-          <Grid item xl={5} sm={5} xs={4}>
-            <Controller
-              control={control}
-              name="worth"
-              defaultValue={1}
-              rules={{
-                required: '必須項目です。',
-                pattern: {
-                  value: /^[0-9]+$/,
-                  message: '整数を入力してください。',
-                },
-                min: {
-                  value: 1,
-                  message: '1以上10以下の整数を入力してください。',
-                },
-                max: {
-                  value: 100,
-                  message: '0以上100以下の整数を入力してください。',
-                },
-              }}
-              as={
-                <TextField
-                  label={isMobile ? '価値' : '価値 (1~100)'}
-                  variant="outlined"
-                  fullWidth
-                  error={!!errors.worth}
-                  helperText={errors.worth?.message}
-                />
-              }
-            />
-          </Grid>
-          <Grid item xl={1} sm={1} xs={2} container justifyContent="flex-end">
-            <Box className={classes.buttonBox}>
-              <IconButton
+        <form onSubmit={handleSubmit(onSuccess, onError)}>
+          <Grid container spacing={2}>
+            <Grid item xl={1} sm={1} xs={2}>
+              <Box className={classes.icon}>
+                <AddShoppingCartIcon />
+              </Box>
+            </Grid>
+            <Grid item xl={5} sm={5} xs={4}>
+              <Controller
+                control={control}
+                name="weight"
+                defaultValue={1}
+                rules={{
+                  required: '必須項目です。',
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: '整数を入力してください。',
+                  },
+                  min: {
+                    value: 1,
+                    message: '1以上, 10以下の整数を入力してください。',
+                  },
+                  max: {
+                    value: 10,
+                    message: '1以上, 10以下の整数を入力してください。',
+                  },
+                }}
+                as={
+                  <TextField
+                    label={isMobile ? '重さ' : '重さ (1~10)'}
+                    variant="outlined"
+                    fullWidth
+                    error={!!errors.weight}
+                    helperText={errors.weight?.message}
+                    onKeyDown={handleKeyDown}
+                  />
+                }
+              />
+            </Grid>
+            <Grid item xl={5} sm={5} xs={4}>
+              <Controller
+                control={control}
+                name="worth"
+                defaultValue={1}
+                rules={{
+                  required: '必須項目です。',
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: '整数を入力してください。',
+                  },
+                  min: {
+                    value: 1,
+                    message: '1以上10以下の整数を入力してください。',
+                  },
+                  max: {
+                    value: 100,
+                    message: '0以上100以下の整数を入力してください。',
+                  },
+                }}
+                as={
+                  <TextField
+                    label={isMobile ? '価値' : '価値 (1~100)'}
+                    variant="outlined"
+                    fullWidth
+                    error={!!errors.worth}
+                    helperText={errors.worth?.message}
+                    onKeyDown={handleKeyDown}
+                  />
+                }
+              />
+            </Grid>
+            <Grid
+              item
+              xl={1}
+              sm={1}
+              xs={2}
+              container
+              justifyContent="center"
+              alignContent="flex-start"
+              className={classes.buttonBox}
+            >
+              <Button
+                type="submit"
+                variant="contained"
                 color="primary"
                 disabled={
                   condition.eval !== 'BEFORE' && condition.eval !== 'COMPLETE'
                 }
-                onClick={handleSubmit(onSuccess, onError)}
               >
-                <AddIcon />
-              </IconButton>
-            </Box>
+                追加
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
+        </form>
       </Box>
     </Card>
   );
