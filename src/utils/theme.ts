@@ -1,5 +1,5 @@
 import {
-  createMuiTheme,
+  createTheme,
   Theme,
   colors,
   responsiveFontSizes,
@@ -120,7 +120,7 @@ const themeConfigs: {
 const theme = (mode: 'light' | 'dark'): Theme => {
   const themeConfig = themeConfigs.find((c) => c.mode === mode);
 
-  return responsiveFontSizes(createMuiTheme({ ...baseConfig, ...themeConfig }));
+  return responsiveFontSizes(createTheme({ ...baseConfig, ...themeConfig }));
 };
 
 export default theme;
