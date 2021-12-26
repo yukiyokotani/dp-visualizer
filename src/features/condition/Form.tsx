@@ -70,7 +70,6 @@ const Form: React.FC = () => {
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (e.code === 'Enter') {
-        e.target.dispatchEvent(new Event('submit'));
         handleSubmit(onSuccess, onError);
       }
     },
