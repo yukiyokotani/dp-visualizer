@@ -1,6 +1,4 @@
 import React, { useCallback, useContext, useMemo } from 'react';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import { Box, Card, Slider, Typography } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import ShoppingBasketOutlinedIcon from '@material-ui/icons/ShoppingBasketOutlined';
@@ -9,16 +7,7 @@ import { RootState } from '../../utils/store';
 import tableSlice from '../dpTable/tableSlice';
 import { SizeContext } from '../../component/App';
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    icon: {
-      marginRight: '16px',
-    },
-  })
-);
-
 const Knapsack: React.FC = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const condition = useSelector<RootState, ConditionState>(
     (state) => state.condition
@@ -51,13 +40,11 @@ const Knapsack: React.FC = () => {
   return (
     <Card>
       <Box p={isMobile ? 2 : 3}>
-        <Grid container spacing={2}>
-          <Grid item xl={1} sm={1} xs={2}>
-            <Box className={classes.icon}>
-              <ShoppingBasketOutlinedIcon />
-            </Box>
-          </Grid>
-          <Grid item xl={11} sm={11} xs={10}>
+        <Box display="flex" alignItems="center">
+          <Box mr={isMobile ? 2 : 3}>
+            <ShoppingBasketOutlinedIcon />
+          </Box>
+          <Box flexGrow={1}>
             <Typography variant="h5" gutterBottom>
               ナップサックの容量
             </Typography>
@@ -76,8 +63,8 @@ const Knapsack: React.FC = () => {
                 onChange={(_, value) => handleChange(value)}
               />
             </Box>
-          </Grid>
-        </Grid>{' '}
+          </Box>
+        </Box>
       </Box>
     </Card>
   );
