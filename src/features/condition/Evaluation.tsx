@@ -1,4 +1,4 @@
-import { Box, Paper, Grid, Typography } from '@material-ui/core';
+import { Box, Paper, Typography } from '@material-ui/core';
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
@@ -36,14 +36,14 @@ const Evaluation: React.FC = () => {
   return (
     <Paper>
       <Box p={isMobile ? 2 : 3}>
-        <Grid container spacing={2}>
-          <Grid item xl={1} sm={1} xs={2}>
+        <Box display="flex" alignItems="center">
+          <Box mr={isMobile ? 2 : 3}>
             <InfoOutlinedIcon />
-          </Grid>
-          <Grid item xl={11} sm={11} xs={10}>
+          </Box>
+          <Box flexGrow={1}>
             <Typography variant="body1">{comment}</Typography>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Box>
     </Paper>
   );

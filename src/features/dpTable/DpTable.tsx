@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       tableLayout: 'fixed',
       borderCollapse: 'collapse',
+      cursor: 'default',
     },
     buttons: {
       marginTop: theme.spacing(2),
@@ -44,20 +45,27 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     trData: {
       height: '50px',
+      [theme.breakpoints.down('sm')]: {
+        height: '36px',
+      },
     },
     thIndex: {
-      width: '28.5%',
+      width: '20%',
       maxWidth: '300px',
       overflow: 'auto',
+      [theme.breakpoints.down('sm')]: {
+        width: '33%',
+      },
     },
     thColumn: {
-      height: '50px',
+      height: '24px',
       width: '6.5%',
       minWidth: '6.5%',
       maxWidth: '6.5%',
     },
     tableLabel: {
-      marginLeft: 'calc(67.5% - 4.5rem)',
+      marginBottom: 16,
+      marginLeft: 'calc(67.5% - 7rem)',
     },
     emptyChip: {
       paddingLeft: '2.5rem',
@@ -405,68 +413,71 @@ const DpTable: React.FC = () => {
   return (
     <Paper>
       <Box p={isMobile ? 2 : 3}>
-        <Grid container spacing={2}>
-          <Grid item xl={1} sm={1} xs={1}>
-            <Box>
-              <ViewComfyIcon />
-            </Box>
-          </Grid>
-          <Grid item xl={12} sm={12} xs={12}>
-            <Grid container spacing={2}>
-              <Grid item xl={12} xs={12}>
-                <Box className={classes.tableLabel}>
-                  <Typography variant="h5">ナップサックの容量</Typography>
-                </Box>
-              </Grid>
-              <Grid item xl={12} xs={12}>
-                <table className={classes.dpTable}>
-                  <tbody>
-                    {renderColumnNameRow(10)}
-                    {table.map((_, i) => renderRow(i))}
-                  </tbody>
-                </table>
-              </Grid>
-              <Grid item xl={12} xs={12} container justifyContent="flex-end">
-                <Box className={classes.buttons}>
-                  <FormControlLabel
-                    control={<Switch />}
-                    label="低速"
-                    checked={condition.enableAnimation}
-                    onChange={() => {
-                      toggleAnimation();
-                    }}
-                  />
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    disabled={condition.eval !== 'COMPLETE'}
-                    onClick={() => {
-                      resetCondition();
-                      resetTable();
-                    }}
-                  >
-                    RESET
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    disabled={
-                      (condition.eval !== 'BEFORE' &&
-                        condition.eval !== 'COMPLETE') ||
-                      condition.items.length === 0
-                    }
-                    onClick={() => {
-                      resetTable();
-                      scanTable();
-                    }}
-                  >
-                    START
-                  </Button>
-                </Box>
-              </Grid>
+        <Box mr={isMobile ? 2 : 3}>
+          <ViewComfyIcon />
+        </Box>
+      </Box>
+      <Box pr={isMobile ? 2 : 3} pb={isMobile ? 2 : 3}>
+        <Box className={classes.tableLabel}>
+          <Typography variant="h5">ナップサックの容量</Typography>
+        </Box>
+        <Box mb={2}>
+          <table className={classes.dpTable}>
+            <tbody>
+              {renderColumnNameRow(10)}
+              {table.map((_, i) => renderRow(i))}
+            </tbody>
+          </table>
+        </Box>
+        <Box>
+          <Grid
+            container
+            justifyContent="flex-end"
+            alignItems="center"
+            spacing={isMobile ? 1 : 2}
+          >
+            <Grid item>
+              <FormControlLabel
+                control={<Switch />}
+                label="低速"
+                checked={condition.enableAnimation}
+                onChange={() => {
+                  toggleAnimation();
+                }}
+              />
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="secondary"
+                disabled={condition.eval !== 'COMPLETE'}
+                onClick={() => {
+                  resetCondition();
+                  resetTable();
+                }}
+              >
+                RESET
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={
+                  (condition.eval !== 'BEFORE' &&
+                    condition.eval !== 'COMPLETE') ||
+                  condition.items.length === 0
+                }
+                onClick={() => {
+                  resetTable();
+                  scanTable();
+                }}
+              >
+                START
+              </Button>
             </Grid>
           </Grid>
-        </Grid>
+        </Box>
       </Box>
     </Paper>
   );
